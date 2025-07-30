@@ -1,16 +1,31 @@
 from app import app, db
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required, current_user
 from app.models import Usuario
-from werkzeug.security import check_password_hash
-from werkzeug.security import generate_password_hash
-
+from werkzeug.security import check_password_hash, generate_password_hash
 import datetime
-from flask_login import current_user
+import pytz
+from flask_mail import Message, Mail
+
+# Configurar zona horaria de Lima, Perú
+LIMA_TZ = pytz.timezone('America/Lima')
+
+# Configuración de mail con tus datos
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'assetnext.tech@gmail.com'
+app.config['MAIL_PASSWORD'] = 'swgx tcqh lpcf tvwc'
+app.config['MAIL_DEFAULT_SENDER'] = 'assetnext.tech@gmail.com'
+
+mail = Mail(app)
 
 @app.route('/')
 @login_required
 def home():
+    # Actualizar última conexión
+    current_user.ultima_conexion = datetime.datetime.now(LIMA_TZ)
+    db.session.commit()
     return render_template('index.html', usuario=current_user)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -21,13 +36,13 @@ def login():
         password = request.form['password']
         user = Usuario.query.filter_by(email=email).first()
         if user and check_password_hash(user.password, password):
+            user.ultima_conexion = datetime.datetime.now(LIMA_TZ)
+            db.session.commit()
             login_user(user)
             return redirect(url_for('home'))
         else:
             error = 'Correo o contraseña incorrectos.'
     return render_template('login.html', error=error)
-
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -39,11 +54,10 @@ def register():
         email = request.form['email']
         password = request.form['password']
         confirm_password = request.form['confirm_password']
-        # Validar que las contraseñas coincidan
+        
         if password != confirm_password:
             error = 'Las contraseñas no coinciden.'
         else:
-            # Verificar si el correo ya existe
             if Usuario.query.filter_by(email=email).first():
                 error = 'El correo ya existe.'
             else:
@@ -52,8 +66,16 @@ def register():
                 except ValueError:
                     error = 'Fecha de nacimiento inválida.'
                     return render_template('register.html', error=error)
+                
                 hashed_password = generate_password_hash(password)
-                new_user = Usuario(nombre=nombre, apellido=apellido, fecha_nacimiento=fecha_nacimiento, email=email, password=hashed_password)
+                new_user = Usuario(
+                    nombre=nombre, 
+                    apellido=apellido, 
+                    fecha_nacimiento=fecha_nacimiento, 
+                    email=email, 
+                    password=hashed_password,
+                    fecha_registro=datetime.datetime.now(LIMA_TZ)
+                )
                 db.session.add(new_user)
                 db.session.commit()
                 return redirect(url_for('login'))
@@ -65,14 +87,61 @@ def olvidar_contraseña():
     success = None
     if request.method == 'POST':
         email = request.form['email']
-        # Aquí iría la lógica para enviar el correo de recuperación
-        # Por ahora solo mostramos un mensaje de éxito si el email existe
         user = Usuario.query.filter_by(email=email).first()
         if user:
-            success = 'Se han enviado instrucciones a tu correo.'
+            token = user.generate_reset_token()
+            
+            # Crear el enlace de reseteo
+            reset_url = url_for('reset_password', token=token, _external=True)
+            
+            # Enviar email
+            try:
+                msg = Message(
+                    'Recuperar contraseña - AssetNext',
+                    recipients=[email]
+                )
+                msg.body = f'''Para resetear tu contraseña, haz clic en el siguiente enlace:
+
+{reset_url}
+
+Si no solicitaste este cambio, ignora este mensaje.
+
+El enlace expira en 15 minutos.
+'''
+                mail.send(msg)
+                success = 'Se han enviado instrucciones a tu correo.'
+            except Exception as e:
+                error = 'Error al enviar el correo. Intenta de nuevo.'
         else:
             error = 'El correo no está registrado.'
     return render_template('olvidarcontraseña.html', error=error, success=success)
+
+@app.route('/reset/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    user = Usuario.query.filter_by(reset_token=token).first()
+    
+    if not user or not user.verify_reset_token(token):
+        flash('El enlace es inválido o ha expirado.')
+        return redirect(url_for('olvidar_contraseña'))
+    
+    error = None
+    if request.method == 'POST':
+        password = request.form['password']
+        confirm_password = request.form['confirm_password']
+        
+        if password != confirm_password:
+            error = 'Las contraseñas no coinciden.'
+        elif len(password) < 6:
+            error = 'La contraseña debe tener al menos 6 caracteres.'
+        elif check_password_hash(user.password, password):
+            error = 'La nueva contraseña debe ser diferente a la actual.'
+        else:
+            user.password = generate_password_hash(password)
+            user.clear_reset_token()
+            flash('Tu contraseña ha sido actualizada.')
+            return redirect(url_for('login'))
+    
+    return render_template('reset_password.html', error=error)
 
 @app.route('/logout')
 @login_required
