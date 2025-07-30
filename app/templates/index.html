@@ -4,7 +4,8 @@
     <title>AssetNext</title>
 </head>
 <body>
-    <h1>Bienvenido a AssetNext</h1>
+    <h1>Bienvenido, {{ usuario.nombre }} {{ usuario.apellido }}</h1>
     <p>hola</p>
+    <p><a href="{{ url_for('logout') }}">Cerrar sesión</a></p>
 </body>
 </html>
