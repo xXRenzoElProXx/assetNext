@@ -130,8 +130,24 @@
         justify-content: space-between;
         align-items: flex-end;
         box-shadow: 0 6px 32px #d4af3720, 0 2px 16px #00000010;
-        position: relative;
-        z-index: 10;
+        position: fixed;
+        top: 0;
+        left: 250px;
+        width: calc(100% - 250px);
+        z-index: 1100;
+        transition: box-shadow 0.18s;
+      }
+      .main-content {
+        margin-left: 250px;
+        min-height: 100vh;
+        background: linear-gradient(120deg, #0a0a0a 80%, #181818 100%);
+      }
+      /* Ajuste para que el contenido no quede debajo del header fijo */
+      .dashboard {
+        padding: 38px 38px 0 38px;
+        max-width: 1400px;
+        margin: 0 auto;
+        margin-top: 120px;
       }
             .header-info {
         display: flex;
