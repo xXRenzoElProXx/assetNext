@@ -7,15 +7,6 @@ REM Verificar si Git está instalado
 git --version >nul 2>&1
 if errorlevel 1 (
     echo ❌ Error: Git no está instalado o no está en el PATH
-    echo Instala Git desde: https://git-scm.com/
-    pause
-    exit /b 1
-)
-
-REM Verificar si estamos en un repositorio Git
-if not exist ".git" (
-    echo ❌ Error: No estás en un repositorio Git
-    echo Ejecuta primero: git clone https://github.com/xXRenzoElProXx/assetNext.git
     pause
     exit /b 1
 )
@@ -23,28 +14,51 @@ if not exist ".git" (
 REM Verificar conexión al remoto
 echo Verificando conexión al repositorio remoto...
 git remote -v
-if errorlevel 1 (
-    echo ❌ Error: No se puede conectar al repositorio remoto
-    pause
-    exit /b 1
+
+REM Verificar archivos eliminados manualmente
+echo.
+echo Verificando archivos faltantes...
+for /f "delims=" %%f in ('git ls-files') do (
+    if not exist "%%f" (
+        echo ⚠️ Archivo faltante detectado: %%f
+        set "missing_files=true"
+    )
 )
 
-REM Hacer pull con manejo de errores
+if defined missing_files (
+    echo.
+    set /p "restore_choice=¿Restaurar archivos faltantes? (s/n): "
+    if /i "!restore_choice!"=="s" (
+        echo Restaurando archivos faltantes...
+        git checkout HEAD -- .
+        if errorlevel 1 (
+            echo ❌ Error al restaurar archivos
+        ) else (
+            echo ✅ Archivos restaurados
+        )
+    )
+)
+
+REM Hacer pull
+echo.
+echo Sincronizando con el repositorio remoto...
 git pull origin main
 if errorlevel 1 (
     echo ❌ Error al hacer pull. Posibles causas:
     echo - Conflictos de merge
     echo - Sin permisos en el repositorio
     echo - Problemas de red
-    echo.
-    echo Intenta resolver manualmente con:
-    echo git status
-    echo git merge --abort (si hay conflictos)
     pause
     exit /b 1
 )
 
-echo ✅ Pull exitoso
+echo ✅ Sincronización exitosa
+
+REM Verificar estado final
+echo.
+echo Estado final del repositorio:
+git status --short
+
 echo.
 echo ================================
 echo Ejecutando iniciar_assetNext.bat...

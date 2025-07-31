@@ -39,6 +39,7 @@ def login():
             user.ultima_conexion = datetime.datetime.now(LIMA_TZ)
             db.session.commit()
             login_user(user)
+            # Redirigir siempre a home, ignorando el parámetro 'next'
             return redirect(url_for('home'))
         else:
             error = 'Correo o contraseña incorrectos.'
@@ -100,6 +101,11 @@ def olvidar_contraseña():
                     'Recuperar contraseña - AssetNext',
                     recipients=[email]
                 )
+                
+                # Renderizar el template HTML con las variables
+                msg.html = render_template('email.html', reset_url=reset_url)
+                
+                # También incluir versión de texto plano como fallback
                 msg.body = f'''Para resetear tu contraseña, haz clic en el siguiente enlace:
 
 {reset_url}
@@ -108,6 +114,7 @@ Si no solicitaste este cambio, ignora este mensaje.
 
 El enlace expira en 15 minutos.
 '''
+                
                 mail.send(msg)
                 success = 'Se han enviado instrucciones a tu correo.'
             except Exception as e:
@@ -120,11 +127,14 @@ El enlace expira en 15 minutos.
 def reset_password(token):
     user = Usuario.query.filter_by(reset_token=token).first()
     
+    # Verificar si el token es inválido o ha expirado
     if not user or not user.verify_reset_token(token):
-        flash('El enlace es inválido o ha expirado.')
-        return redirect(url_for('olvidar_contraseña'))
+        # Renderizar la misma página pero con token_expired=True
+        return render_template('reset_password.html', token_expired=True)
     
     error = None
+    success = None
+    
     if request.method == 'POST':
         password = request.form['password']
         confirm_password = request.form['confirm_password']
@@ -136,12 +146,15 @@ def reset_password(token):
         elif check_password_hash(user.password, password):
             error = 'La nueva contraseña debe ser diferente a la actual.'
         else:
+            # Actualizar la contraseña
             user.password = generate_password_hash(password)
+            # Limpiar el token para que no se pueda usar de nuevo
             user.clear_reset_token()
-            flash('Tu contraseña ha sido actualizada.')
-            return redirect(url_for('login'))
+            db.session.commit()
+            
+            success = 'Tu contraseña ha sido actualizada exitosamente.'
     
-    return render_template('reset_password.html', error=error)
+    return render_template('reset_password.html', error=error, success=success, token_expired=False)
 
 @app.route('/logout')
 @login_required

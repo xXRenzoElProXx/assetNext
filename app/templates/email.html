@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recuperar Contraseña - AssetNext</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2a2a 100%);
+        color: #ffffff;
+        line-height: 1.6;
+        padding: 20px;
+      }
+
+      .email-container {
+        max-width: 500px;
+        margin: 0 auto;
+        background: linear-gradient(145deg, #2a2a2a 0%, #1a1a1a 50%, #0a0a0a 100%);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+        border: 1px solid rgba(255, 215, 0, 0.2);
+      }
+
+      .email-header {
+        background: linear-gradient(90deg, #ffd700, #ffed4a, #f59e0b, #d97706, #ffd700);
+        height: 4px;
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+      }
+
+      .email-content {
+        padding: 30px;
+        text-align: center;
+      }
+
+      .logo {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 15px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #1a1a1a 0%, #333 25%, #666 50%, #333 75%, #1a1a1a 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 215, 0, 0.2);
+        border: 2px solid #ffd700;
+      }
+
+      .logo-text {
+        font-size: 16px;
+        font-weight: bold;
+        color: #ffd700;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      }
+
+      .company-name {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: #ffd700;
+        margin-bottom: 20px;
+        letter-spacing: 1px;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+
+      .email-title {
+        font-size: 1.3rem;
+        color: #e0c96a;
+        margin-bottom: 20px;
+        font-weight: 600;
+      }
+
+      .email-message {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 15px;
+        margin-bottom: 25px;
+        line-height: 1.6;
+      }
+
+      .reset-button {
+        display: inline-block;
+        padding: 14px 28px;
+        background: linear-gradient(135deg, #bfa93a 0%, #e6d36a 25%, #b8860b 50%, #a67c1b 75%, #7c5209 100%);
+        color: #000000 !important;
+        text-decoration: none !important;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin: 15px 0;
+        box-shadow: 0 8px 16px rgba(191, 169, 58, 0.3);
+        transition: all 0.3s ease;
+        border: none;
+      }
+
+      .reset-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(191, 169, 58, 0.4);
+        color: #000000 !important;
+        text-decoration: none !important;
+      }
+
+      .expiry-notice {
+        background: rgba(255, 107, 107, 0.1);
+        border: 1px solid rgba(255, 107, 107, 0.3);
+        border-left: 4px solid #ff6b6b;
+        border-radius: 6px;
+        padding: 12px;
+        margin: 20px 0;
+        color: rgba(255, 107, 107, 0.9);
+        font-size: 13px;
+      }
+
+      .email-footer {
+        border-top: 1px solid rgba(255, 215, 0, 0.2);
+        padding: 20px 30px;
+        text-align: center;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 12px;
+      }
+
+      .footer-logo {
+        color: #ffd700;
+        font-weight: bold;
+        margin-bottom: 8px;
+      }
+
+      @media (max-width: 600px) {
+        .email-content {
+          padding: 25px 20px;
+        }
+
+        .company-name {
+          font-size: 1.5rem;
+        }
+
+        .reset-button {
+          display: block;
+          width: 100%;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="email-header"></div>
+
+      <div class="email-content">
+        <div class="company-name">AssetNext</div>
+
+        <h1 class="email-title">Recuperación de Contraseña</h1>
+
+        <div class="email-message">
+          <p>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta.</p>
+          <p>Haz clic en el botón para crear una nueva contraseña:</p>
+        </div>
+
+        <a href="{{ reset_url }}" class="reset-button" style="color: #000000 !important; text-decoration: none !important;">
+          Restablecer Contraseña
+        </a>
+
+        <div class="expiry-notice">
+          <strong>⏰ Importante:</strong> Este enlace expira en <strong>15 minutos</strong>.
+        </div>
+      </div>
+
+      <div class="email-footer">
+        <p>© 2025 AssetNext. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </body>
+</html>

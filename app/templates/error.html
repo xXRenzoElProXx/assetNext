@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Error {{ code }} - AssetNext</title>
+    <link
+      rel="icon"
+      type="image/jpeg"
+      href="{{ url_for('static', filename='AssetNext.jpg') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'DM Sans', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: radial-gradient(
+            circle at 20% 80%,
+            rgba(255, 215, 0, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 20%,
+            rgba(255, 193, 7, 0.1) 0%,
+            transparent 50%
+          ),
+          linear-gradient(
+            135deg,
+            #0a0a0a 0%,
+            #1a1a1a 25%,
+            #2a2a2a 50%,
+            #1a1a1a 75%,
+            #0a0a0a 100%
+          );
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 15px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      body::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 2px,
+          rgba(255, 215, 0, 0.03) 2px,
+          rgba(255, 215, 0, 0.03) 4px
+        );
+        pointer-events: none;
+      }
+
+      .error-container {
+        background: linear-gradient(
+          145deg,
+          #2a2a2a 0%,
+          #1a1a1a 50%,
+          #0a0a0a 100%
+        );
+        padding: 30px 35px;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8),
+          0 0 0 1px rgba(255, 215, 0, 0.3),
+          inset 0 1px 2px rgba(255, 215, 0, 0.1),
+          inset 0 -1px 2px rgba(0, 0, 0, 0.8);
+        width: 100%;
+        max-width: 480px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+      }
+
+      .error-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(
+          90deg,
+          #ff4757,
+          #ff6b6b,
+          #ff7675,
+          #e17055,
+          #ff4757
+        );
+        box-shadow: 0 0 8px rgba(255, 71, 87, 0.5);
+      }
+
+      .error-container::after {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 215, 0, 0.05) 0%,
+          transparent 50%
+        );
+        animation: rotate 20s linear infinite;
+        pointer-events: none;
+      }
+
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .logo {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 15px;
+        border-radius: 50%;
+        background: linear-gradient(
+            135deg,
+            #1a1a1a 0%,
+            #333 25%,
+            #666 50%,
+            #333 75%,
+            #1a1a1a 100%
+          ),
+          radial-gradient(
+            circle at 30% 30%,
+            rgba(255, 215, 0, 0.3) 0%,
+            transparent 50%
+          );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4),
+          inset 0 2px 4px rgba(255, 215, 0, 0.2),
+          inset 0 -2px 4px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 215, 0, 0.1);
+        border: 2px solid transparent;
+        background-clip: padding-box;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .logo::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(135deg, #ffd700, #ffed4a, #f59e0b, #d97706);
+        border-radius: 50%;
+        z-index: -1;
+        opacity: 0.8;
+      }
+
+      .logo img {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3));
+        position: relative;
+        z-index: 2;
+      }
+
+      .company-name {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: #ffd700;
+        margin-bottom: 20px;
+        letter-spacing: 1.2px;
+        text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+        position: relative;
+        z-index: 2;
+      }
+
+      .error-icon {
+        font-size: 3.5rem;
+        margin-bottom: 18px;
+        animation: pulse 2s infinite;
+        position: relative;
+        z-index: 2;
+        filter: drop-shadow(0 0 8px rgba(255, 71, 87, 0.3));
+        color: #ff6b6b;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .error-code {
+        font-size: 3rem;
+        font-weight: 800;
+        color: #ff6b6b;
+        margin-bottom: 12px;
+        text-shadow: 0 0 12px rgba(255, 107, 107, 0.4),
+          0 2px 4px rgba(0, 0, 0, 0.8);
+        position: relative;
+        z-index: 2;
+        letter-spacing: 1.5px;
+      }
+
+      .error-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #ffd700;
+        margin-bottom: 15px;
+        text-shadow: 0 0 8px rgba(255, 215, 0, 0.3),
+          0 2px 4px rgba(0, 0, 0, 0.8);
+        position: relative;
+        z-index: 2;
+      }
+
+      .error-description {
+        font-size: 0.95rem;
+        color: rgba(255, 215, 0, 0.8);
+        margin-bottom: 25px;
+        line-height: 1.5;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+        position: relative;
+        z-index: 2;
+      }
+
+      .error-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 2;
+        margin-bottom: 20px;
+      }
+
+      .btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        text-decoration: none;
+        display: inline-block;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+      }
+
+      .btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .btn:hover::before {
+        left: 100%;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .btn:active {
+        transform: translateY(0);
+      }
+
+      .btn-primary {
+        background: linear-gradient(
+          135deg,
+          #bfa93a 0%,
+          #e6d36a 25%,
+          #b8860b 50%,
+          #a67c1b 75%,
+          #7c5209 100%
+        );
+        color: #181818;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.12);
+      }
+
+      .btn-primary:hover {
+        background: linear-gradient(
+          135deg,
+          #e6d36a 0%,
+          #bfa93a 25%,
+          #b8860b 50%,
+          #a67c1b 75%,
+          #7c5209 100%
+        );
+        box-shadow: 0 6px 12px rgba(191, 169, 58, 0.28);
+      }
+
+      .btn-secondary {
+        background: linear-gradient(
+          135deg,
+          #4a4a4a 0%,
+          #6a6a6a 25%,
+          #5a5a5a 50%,
+          #3a3a3a 75%,
+          #2a2a2a 100%
+        );
+        color: #ffd700;
+        border: 2px solid rgba(255, 215, 0, 0.3);
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+      }
+
+      .btn-secondary:hover {
+        background: linear-gradient(
+          135deg,
+          #6a6a6a 0%,
+          #4a4a4a 25%,
+          #5a5a5a 50%,
+          #3a3a3a 75%,
+          #2a2a2a 100%
+        );
+        border-color: rgba(255, 215, 0, 0.5);
+        box-shadow: 0 6px 12px rgba(255, 215, 0, 0.15);
+      }
+
+      .error-details {
+        margin-top: 20px;
+        padding-top: 18px;
+        border-top: 1px solid rgba(255, 215, 0, 0.2);
+        position: relative;
+        z-index: 2;
+      }
+
+      .error-details p {
+        color: rgba(255, 215, 0, 0.6);
+        font-size: 0.85rem;
+        margin: 6px 0;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+      }
+
+      .error-details .timestamp {
+        color: rgba(255, 215, 0, 0.4);
+        font-size: 0.75rem;
+        font-style: italic;
+      }
+
+      @media (max-width: 480px) {
+        .error-container {
+          padding: 25px 20px;
+          margin: 8px;
+        }
+
+        .error-code {
+          font-size: 2.5rem;
+        }
+
+        .error-title {
+          font-size: 1.3rem;
+        }
+
+        .error-actions {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .btn {
+          width: 100%;
+          max-width: 220px;
+        }
+      }
+
+      /* Colores específicos para diferentes tipos de error */
+      .error-400 .error-container::before {
+        background: linear-gradient(90deg, #f39c12, #e67e22, #d35400);
+      }
+      .error-401 .error-container::before {
+        background: linear-gradient(90deg, #3498db, #2980b9, #1abc9c);
+      }
+      .error-403 .error-container::before {
+        background: linear-gradient(90deg, #e74c3c, #c0392b, #d35400);
+      }
+      .error-404 .error-container::before {
+        background: linear-gradient(90deg, #e74c3c, #ff4757, #ff6b6b);
+      }
+      .error-405 .error-container::before {
+        background: linear-gradient(90deg, #9b59b6, #8e44ad, #663399);
+      }
+      .error-413 .error-container::before {
+        background: linear-gradient(90deg, #c0392b, #e74c3c, #ff4757);
+      }
+      .error-429 .error-container::before {
+        background: linear-gradient(90deg, #f39c12, #e67e22, #d35400);
+      }
+      .error-500 .error-container::before {
+        background: linear-gradient(90deg, #c0392b, #e74c3c, #ff4757);
+      }
+      .error-503 .error-container::before {
+        background: linear-gradient(90deg, #16a085, #1abc9c, #27ae60);
+      }
+    </style>
+  </head>
+  <body class="error-{{ code }}">
+    <div class="error-container">
+      <div class="logo">
+        <img
+          src="{{ url_for('static', filename='AssetNext.jpg') }}"
+          alt="AssetNext Logo"
+        />
+      </div>
+      <div class="company-name">AssetNext</div>
+
+      <div class="error-icon">
+        <i class="{{ icon }}"></i>
+      </div>
+      <div class="error-code">{{ code }}</div>
+      <div class="error-title">{{ title }}</div>
+      <div class="error-description">{{ description }}</div>
+
+      <div class="error-actions">
+        {% if back_url %}
+        <a href="{{ back_url }}" class="btn btn-primary">Volver al Inicio</a>
+        {% endif %}
+      </div>
+
+      <div class="error-details">
+        <p>Si el problema persiste, contacta al administrador del sistema.</p>
+        <p class="timestamp">
+          {{ moment().format('DD/MM/YYYY HH:mm:ss') if moment else '' }}
+        </p>
+      </div>
+    </div>
+
+    <script>
+      // Efecto de partículas de error
+      function createErrorParticles() {
+        const particles = 12
+        for (let i = 0; i < particles; i++) {
+          const particle = document.createElement('div')
+          particle.style.cssText = `
+                    position: fixed;
+                    width: 3px;
+                    height: 3px;
+                    background: rgba(255, 107, 107, 0.6);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    z-index: 1;
+                `
+
+          const x = Math.random() * window.innerWidth
+          const y = Math.random() * window.innerHeight
+          particle.style.left = x + 'px'
+          particle.style.top = y + 'px'
+
+          document.body.appendChild(particle)
+
+          particle.animate(
+            [
+              { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+              {
+                transform: `translate(${(Math.random() - 0.5) * 180}px, ${
+                  (Math.random() - 0.5) * 180
+                }px) scale(0)`,
+                opacity: 0
+              }
+            ],
+            {
+              duration: 1800 + Math.random() * 800,
+              easing: 'ease-out'
+            }
+          ).onfinish = () => particle.remove()
+        }
+      }
+
+      // Crear partículas al cargar la página
+      setTimeout(createErrorParticles, 500)
+
+      // Agregar efecto de temblor al código de error en errores críticos
+      const criticalErrors = ['500', '503', '413']
+      const errorCode = '{{ code }}'
+      if (criticalErrors.includes(errorCode)) {
+        const codeElement = document.querySelector('.error-code')
+        codeElement.style.animation =
+          'shake 0.5s ease-in-out infinite alternate'
+      }
+
+      // CSS para la animación de temblor
+      const shakeStyle = document.createElement('style')
+      shakeStyle.textContent = `
+            @keyframes shake {
+                0% { transform: translateX(-2px); }
+                100% { transform: translateX(2px); }
+            }
+        `
+      document.head.appendChild(shakeStyle)
+    </script>
+  </body>
+</html>
