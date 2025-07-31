@@ -593,17 +593,88 @@
           <p class="header-subtitle">Resumen de tu actividad financiera</p>
         </div>
         <div class="header-actions">
-          <div class="user-menu">
+          <div class="user-menu" id="userMenu" onclick="toggleDropdown()">
             <div class="user-avatar">JD</div>
             <div class="user-info">
-              <div class="user-name">Juan Pérez</div>
+              <div class="user-name">{{ current_user.nombre }} {{ current_user.apellido }}</div>
               <div class="user-role">Usuario Premium</div>
             </div>
             <i
               class="fas fa-chevron-down"
               style="color: #666; font-size: 12px"
             ></i>
+            <div id="userDropdown" class="user-dropdown">
+              <div class="dropdown-container">
+                <!-- Aquí puedes agregar más contenido, por ejemplo, datos del usuario, links, etc. -->
+                <a href="{{ url_for('logout') }}" class="dropdown-link logout-link">
+                  <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                </a>
+              </div>
+            </div>
+            <style>
+              .user-dropdown {
+                display: none;
+                position: absolute;
+                right: 0;
+                top: 48px;
+                background: #232323;
+                border: 1px solid #2a2a2a;
+                border-radius: 10px;
+                min-width: 180px;
+                z-index: 2000;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+                padding: 0;
+                animation: fadeIn 0.18s;
+              }
+              @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(-8px); }
+                to { opacity: 1; transform: translateY(0); }
+              }
+              .dropdown-container {
+                padding: 12px 0 6px 0;
+                display: flex;
+                flex-direction: column;
+                gap: 2px;
+              }
+              .dropdown-link {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 10px 22px 10px 18px;
+                color: #fff;
+                text-decoration: none;
+                font-size: 14px;
+                border: none;
+                background: none;
+                transition: background 0.18s, color 0.18s;
+                border-radius: 6px;
+                cursor: pointer;
+              }
+              .dropdown-link:hover {
+                background: #181818;
+                color: #d4af37;
+              }
+              .logout-link {
+                color: #ef4444;
+              }
+              .logout-link:hover {
+                color: #fff;
+                background: #b91c1c;
+              }
+            </style>
           </div>
+          <script>
+            function toggleDropdown() {
+              var dropdown = document.getElementById('userDropdown');
+              dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+              document.addEventListener('click', function handler(e) {
+                if (!document.getElementById('userMenu').contains(e.target)) {
+                  dropdown.style.display = 'none';
+                  document.removeEventListener('click', handler);
+                }
+              });
+            }
+          </script>
         </div>
       </header>
 
