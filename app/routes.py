@@ -28,6 +28,37 @@ def home():
     db.session.commit()
     return render_template('index.html', usuario=current_user)
 
+@app.route('/transacciones')
+@login_required
+def transacciones():
+    return render_template('transacciones.html', usuario=current_user)
+
+@app.route('/cuentas')
+@login_required
+def cuentas():
+    return render_template('cuentas.html', usuario=current_user)
+
+@app.route('/metas')
+@login_required
+def metas():
+    return render_template('metas.html', usuario=current_user)
+
+@app.route('/presupuestos')
+@login_required
+def presupuestos():
+    return render_template('presupuestos.html', usuario=current_user)
+
+@app.route('/reportes')
+@login_required
+def reportes():
+    return render_template('reportes.html', usuario=current_user)
+
+@app.route('/configuracion')
+@login_required
+def configuracion():
+    return render_template('configuracion.html', usuario=current_user)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None

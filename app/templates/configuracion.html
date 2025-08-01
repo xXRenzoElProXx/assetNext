@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AssetNext - Configuración</title>
+    <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='AssetNext.jpg') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      :root {
+        --gold: #d4af37;
+        --gold-light: #ffe082;
+        --bg-dark: #0a0a0a;
+        --bg-darker: #181818;
+        --bg-card: #161616;
+        --border: #2a2a2a;
+        --text-main: #fff;
+        --text-muted: #888;
+        --shadow: 0 8px 32px rgba(0,0,0,0.25);
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg-dark);
+        color: var(--text-main);
+        min-height: 100vh;
+        font-size: 15px;
+        line-height: 1.6;
+        letter-spacing: 0.01em;
+      }
+      .sidebar {
+        position: fixed;
+        left: 0; top: 0;
+        width: 250px;
+        height: 100vh;
+        background: linear-gradient(180deg, #1a1a1a 0%, #151515 100%);
+        border-right: 1.5px solid var(--border);
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        box-shadow: 2px 0 16px 0 rgba(0,0,0,0.12);
+      }
+      .sidebar-header {
+        padding: 32px 20px 18px 20px;
+        border-bottom: 1.5px solid var(--border);
+        background: linear-gradient(90deg, #181818 60%, #232323 100%);
+      }
+      .sidebar-logo {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 6px;
+      }
+      .logo-icon-img {
+        width: 52px;
+        height: 52px;
+        border-radius: 100%;
+        object-fit: cover;
+        border: 2.5px solid var(--gold);
+        box-shadow: 0 2px 12px #d4af3740;
+      }
+      .logo-text {
+        font-size: 22px;
+        font-weight: 800;
+        color: var(--gold);
+        letter-spacing: -0.5px;
+        text-shadow: 0 2px 8px #d4af3720;
+      }
+      .logo-subtitle {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-left: 56px;
+        font-weight: 500;
+      }
+      .sidebar-nav {
+        flex: 1;
+        padding: 24px 0 0 0;
+      }
+      .nav-section {
+        margin-bottom: 36px;
+      }
+      .nav-title {
+        font-size: 11px;
+        font-weight: 700;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        padding: 0 20px;
+        margin-bottom: 14px;
+      }
+      .nav-item { margin-bottom: 2px; }
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 22px;
+        color: #ccc;
+        text-decoration: none;
+        transition: all 0.18s;
+        font-weight: 600;
+        border-radius: 8px 0 0 8px;
+      }
+      .nav-link:hover {
+        background: rgba(212, 175, 55, 0.10);
+        color: var(--gold);
+      }
+      .nav-link.active {
+        background: linear-gradient(90deg, rgba(212, 175, 55, 0.18) 0%, transparent 100%);
+        color: var(--gold);
+        border-right: 3px solid var(--gold);
+      }
+      .nav-icon {
+        width: 20px;
+        text-align: center;
+        font-size: 17px;
+      }
+      .main-content {
+        margin-left: 250px;
+        min-height: 100vh;
+        background: linear-gradient(120deg, #0a0a0a 80%, #181818 100%);
+      }
+      .header {
+        background: linear-gradient(90deg, #181818 70%, #232323 100%);
+        border-bottom: 3px solid var(--gold);
+        padding: 38px 48px 28px 48px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        box-shadow: 0 6px 32px #d4af3720, 0 2px 16px #00000010;
+        position: fixed;
+        top: 0;
+        left: 250px;
+        width: calc(100% - 250px);
+        z-index: 1100;
+        transition: box-shadow 0.18s;
+      }
+      .dashboard {
+        padding: 38px 38px 0 38px;
+        max-width: 1400px;
+        margin: 0 auto;
+        margin-top: 130px;
+      }
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 28px;
+        margin-bottom: 38px;
+      }
+      .stat-card {
+        background: var(--bg-card);
+        border: 1.5px solid var(--border);
+        border-radius: 18px;
+        padding: 32px 28px 28px 28px;
+        box-shadow: var(--shadow);
+        transition: all 0.18s;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+      }
+      .stat-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--gold);
+        margin-bottom: 18px;
+      }
+      .stat-desc {
+        color: #ccc;
+        font-size: 1.1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <img src="{{ url_for('static', filename='AssetNext.jpg') }}" alt="AssetNext Logo" class="logo-icon-img" />
+          <div class="logo-text">AssetNext</div>
+        </div>
+        <div class="logo-subtitle">Gestión Financiera</div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-title">Principal</div>
+          <div class="nav-item">
+            <a href="{{ url_for('home') }}" class="nav-link">
+              <i class="nav-icon fas fa-chart-line"></i>
+              Dashboard
+            </a>
+          </div>
+          <div class="nav-item">
+            <a href="{{ url_for('transacciones') }}" class="nav-link">
+              <i class="nav-icon fas fa-exchange-alt"></i>
+              Transacciones
+            </a>
+          </div>
+          <div class="nav-item">
+            <a href="{{ url_for('cuentas') }}" class="nav-link">
+              <i class="nav-icon fas fa-wallet"></i>
+              Cuentas
+            </a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-title">Planificación</div>
+          <div class="nav-item">
+            <a href="{{ url_for('metas') }}" class="nav-link">
+              <i class="nav-icon fas fa-bullseye"></i>
+              Metas
+            </a>
+          </div>
+          <div class="nav-item">
+            <a href="{{ url_for('presupuestos') }}" class="nav-link">
+              <i class="nav-icon fas fa-chart-pie"></i>
+              Presupuestos
+            </a>
+          </div>
+          <div class="nav-item">
+            <a href="{{ url_for('reportes') }}" class="nav-link">
+              <i class="nav-icon fas fa-file-invoice"></i>
+              Reportes
+            </a>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-title">Configuración</div>
+          <div class="nav-item">
+            <a href="{{ url_for('configuracion') }}" class="nav-link active">
+              <i class="nav-icon fas fa-cog"></i>
+              Ajustes
+            </a>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <!-- Main Content -->
+    <div class="main-content">
+      <header class="header">
+        <div class="header-info">
+          <h1 class="header-title">Ajustes</h1>
+          <p class="header-subtitle">Configura tu cuenta y preferencias</p>
+        </div>
+      </header>
+      <div class="dashboard">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-title">Ajustes</div>
+            <div class="stat-desc">Aquí puedes configurar las opciones de tu cuenta y preferencias de la aplicación.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
