@@ -31,33 +31,32 @@ def home():
 @app.route('/transacciones')
 @login_required
 def transacciones():
-    return render_template('transacciones.html', usuario=current_user)
+    return render_template('dashboard/transacciones.html', usuario=current_user)
 
 @app.route('/cuentas')
 @login_required
 def cuentas():
-    return render_template('cuentas.html', usuario=current_user)
+    return render_template('dashboard/cuentas.html', usuario=current_user)
 
 @app.route('/metas')
 @login_required
 def metas():
-    return render_template('metas.html', usuario=current_user)
+    return render_template('dashboard/metas.html', usuario=current_user)
 
 @app.route('/presupuestos')
 @login_required
 def presupuestos():
-    return render_template('presupuestos.html', usuario=current_user)
+    return render_template('dashboard/presupuestos.html', usuario=current_user)
 
 @app.route('/reportes')
 @login_required
 def reportes():
-    return render_template('reportes.html', usuario=current_user)
+    return render_template('dashboard/reportes.html', usuario=current_user)
 
 @app.route('/configuracion')
 @login_required
 def configuracion():
-    return render_template('configuracion.html', usuario=current_user)
-
+    return render_template('dashboard/configuracion.html', usuario=current_user)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -74,7 +73,7 @@ def login():
             return redirect(url_for('home'))
         else:
             error = 'Correo o contraseña incorrectos.'
-    return render_template('login.html', error=error)
+    return render_template('auth/login.html', error=error)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -97,7 +96,7 @@ def register():
                     fecha_nacimiento = datetime.datetime.strptime(fecha_nacimiento_str, '%Y-%m-%d').date()
                 except ValueError:
                     error = 'Fecha de nacimiento inválida.'
-                    return render_template('register.html', error=error)
+                    return render_template('auth/register.html', error=error)
                 
                 hashed_password = generate_password_hash(password)
                 new_user = Usuario(
@@ -111,7 +110,7 @@ def register():
                 db.session.add(new_user)
                 db.session.commit()
                 return redirect(url_for('login'))
-    return render_template('register.html', error=error)
+    return render_template('auth/register.html', error=error)
 
 @app.route('/olvidarcontraseña', methods=['GET', 'POST'])
 def olvidar_contraseña():
@@ -134,7 +133,7 @@ def olvidar_contraseña():
                 )
                 
                 # Renderizar el template HTML con las variables
-                msg.html = render_template('email.html', reset_url=reset_url)
+                msg.html = render_template('auth/email.html', reset_url=reset_url)
                 
                 # También incluir versión de texto plano como fallback
                 msg.body = f'''Para resetear tu contraseña, haz clic en el siguiente enlace:
@@ -152,7 +151,7 @@ El enlace expira en 15 minutos.
                 error = 'Error al enviar el correo. Intenta de nuevo.'
         else:
             error = 'El correo no está registrado.'
-    return render_template('olvidarcontraseña.html', error=error, success=success)
+    return render_template('auth/olvidarcontraseña.html', error=error, success=success)
 
 @app.route('/reset/<token>', methods=['GET', 'POST'])
 def reset_password(token):
@@ -161,7 +160,7 @@ def reset_password(token):
     # Verificar si el token es inválido o ha expirado
     if not user or not user.verify_reset_token(token):
         # Renderizar la misma página pero con token_expired=True
-        return render_template('reset_password.html', token_expired=True)
+        return render_template('auth/reset_password.html', token_expired=True)
     
     error = None
     success = None
@@ -185,7 +184,7 @@ def reset_password(token):
             
             success = 'Tu contraseña ha sido actualizada exitosamente.'
     
-    return render_template('reset_password.html', error=error, success=success, token_expired=False)
+    return render_template('auth/reset_password.html', error=error, success=success, token_expired=False)
 
 @app.route('/logout')
 @login_required

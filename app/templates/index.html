@@ -4,9 +4,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AssetNext - Dashboard Financiero</title>
-    <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='AssetNext.jpg') }}" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link
+      rel="icon"
+      type="image/jpeg"
+      href="{{ url_for('static', filename='AssetNext.jpg') }}"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
       :root {
         --gold: #d4af37;
@@ -17,9 +27,26 @@
         --border: #2a2a2a;
         --text-main: #fff;
         --text-muted: #888;
-        --shadow: 0 8px 32px rgba(0,0,0,0.25);
+        --shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+        overflow: hidden;
       }
-      * { margin: 0; padding: 0; box-sizing: border-box; }
+
+      /* Modo claro */
+      [data-theme='light'] {
+        --bg-dark: #f8fafc;
+        --bg-darker: #f1f5f9;
+        --bg-card: #ffffff;
+        --border: #e2e8f0;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
       body {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         background: var(--bg-dark);
@@ -28,24 +55,35 @@
         font-size: 15px;
         line-height: 1.6;
         letter-spacing: 0.01em;
+        transition: background-color 0.3s, color 0.3s;
       }
       /* Sidebar */
       .sidebar {
         position: fixed;
-        left: 0; top: 0;
+        left: 0;
+        top: 0;
         width: 250px;
         height: 100vh;
-        background: linear-gradient(180deg, #1a1a1a 0%, #151515 100%);
+        background: linear-gradient(
+          180deg,
+          var(--bg-darker) 0%,
+          var(--bg-card) 100%
+        );
         border-right: 1.5px solid var(--border);
         z-index: 1000;
         display: flex;
         flex-direction: column;
-        box-shadow: 2px 0 16px 0 rgba(0,0,0,0.12);
+        box-shadow: 2px 0 16px 0 rgba(0, 0, 0, 0.12);
+        transition: background 0.3s;
       }
       .sidebar-header {
         padding: 32px 20px 18px 20px;
         border-bottom: 1.5px solid var(--border);
-        background: linear-gradient(90deg, #181818 60%, #232323 100%);
+        background: linear-gradient(
+          90deg,
+          var(--bg-darker) 60%,
+          var(--bg-card) 100%
+        );
       }
       .sidebar-logo {
         display: flex;
@@ -77,6 +115,8 @@
       .sidebar-nav {
         flex: 1;
         padding: 24px 0 0 0;
+        display: flex;
+        flex-direction: column;
       }
       .nav-section {
         margin-bottom: 36px;
@@ -90,24 +130,30 @@
         padding: 0 20px;
         margin-bottom: 14px;
       }
-      .nav-item { margin-bottom: 2px; }
+      .nav-item {
+        margin-bottom: 2px;
+      }
       .nav-link {
         display: flex;
         align-items: center;
         gap: 12px;
         padding: 13px 22px;
-        color: #ccc;
+        color: var(--text-muted);
         text-decoration: none;
         transition: all 0.18s;
         font-weight: 600;
         border-radius: 8px 0 0 8px;
       }
       .nav-link:hover {
-        background: rgba(212, 175, 55, 0.10);
+        background: rgba(212, 175, 55, 0.1);
         color: var(--gold);
       }
       .nav-link.active {
-        background: linear-gradient(90deg, rgba(212, 175, 55, 0.18) 0%, transparent 100%);
+        background: linear-gradient(
+          90deg,
+          rgba(212, 175, 55, 0.18) 0%,
+          transparent 100%
+        );
         color: var(--gold);
         border-right: 3px solid var(--gold);
       }
@@ -116,40 +162,66 @@
         text-align: center;
         font-size: 17px;
       }
+
+      /* Logout en la parte inferior del sidebar */
+      .sidebar-footer {
+        margin-top: auto;
+        padding: 20px;
+        border-top: 1.5px solid var(--border);
+      }
+      .logout-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 13px 22px;
+        color: #ef4444;
+        text-decoration: none;
+        transition: all 0.18s;
+        font-weight: 600;
+        border-radius: 8px;
+        border: 1px solid #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+        justify-content: center;
+      }
+      .logout-link:hover {
+        background: #ef4444;
+        color: white;
+      }
+
       /* Main Content */
       .main-content {
         margin-left: 250px;
         min-height: 100vh;
-        background: linear-gradient(120deg, #0a0a0a 80%, #181818 100%);
+        background: linear-gradient(
+          120deg,
+          var(--bg-dark) 80%,
+          var(--bg-darker) 100%
+        );
+        transition: background 0.3s;
       }
+
+      /* Header */
       .header {
-        background: linear-gradient(90deg, #181818 70%, #232323 100%);
+        background: linear-gradient(
+          90deg,
+          var(--bg-darker) 70%,
+          var(--bg-card) 100%
+        );
         border-bottom: 3px solid var(--gold);
         padding: 38px 48px 28px 48px;
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
-        box-shadow: 0 6px 32px #d4af3720, 0 2px 16px #00000010;
+        box-shadow: 0 6px 32px #d4af3720, 0 2px 16px rgba(0, 0, 0, 0.1);
         position: fixed;
         top: 0;
         left: 250px;
         width: calc(100% - 250px);
         z-index: 1100;
-        transition: box-shadow 0.18s;
+        transition: all 0.3s;
       }
-      .main-content {
-        margin-left: 250px;
-        min-height: 100vh;
-        background: linear-gradient(120deg, #0a0a0a 80%, #181818 100%);
-      }
-      /* Ajuste para que el contenido no quede debajo del header fijo */
-      .dashboard {
-        padding: 38px 38px 0 38px;
-        max-width: 1400px;
-        margin: 0 auto;
-        margin-top: 130px; /* Altura del header fijo para que no lo tape */
-      }
-            .header-info {
+
+      .header-info {
         display: flex;
         flex-direction: column;
         gap: 6px;
@@ -182,25 +254,65 @@
         align-items: center;
         gap: 18px;
       }
-      /* User Dropdown (ya mejorado en pasos anteriores) */
+
+      /* Notificaciones */
+      .notifications {
+        position: relative;
+        cursor: pointer;
+        padding: 10px;
+        border-radius: 10px;
+        background: var(--bg-card);
+        border: 1.5px solid var(--border);
+        transition: all 0.2s;
+      }
+      .notifications:hover {
+        border-color: var(--gold);
+      }
+      .notification-icon {
+        font-size: 20px;
+        color: var(--text-muted);
+      }
+      .notification-badge {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: #ef4444;
+        color: white;
+        border-radius: 50%;
+        width: 18px;
+        height: 18px;
+        font-size: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+      }
+
+      /* User Menu */
       .user-menu {
         display: flex;
         align-items: center;
         gap: 12px;
         padding: 10px 16px;
-        background: #1a1a1a;
-        border: 1.5px solid #2a2a2a;
+        background: var(--bg-card);
+        border: 1.5px solid var(--border);
         border-radius: 10px;
         cursor: pointer;
         transition: all 0.2s;
         position: relative;
       }
-      .user-menu:hover { border-color: var(--gold); }
+      .user-menu:hover {
+        border-color: var(--gold);
+      }
       .user-avatar {
         width: 36px;
         height: 36px;
         border-radius: 8px;
-        background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+        background: linear-gradient(
+          135deg,
+          var(--gold) 0%,
+          var(--gold-light) 100%
+        );
         display: flex;
         align-items: center;
         justify-content: center;
@@ -217,25 +329,151 @@
       .user-name {
         font-size: 18px;
         font-weight: 800;
-        color: #fff;
+        color: var(--text-main);
       }
       .user-role {
         font-size: 15px;
         color: var(--text-muted);
         font-weight: 600;
       }
+
+      /* User Dropdown */
+      .user-dropdown {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 48px;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        min-width: 250px;
+        z-index: 2000;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+        padding: 18px 0 14px 0;
+        animation: fadeIn 0.18s;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .dropdown-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 20px;
+        color: var(--text-main);
+        text-decoration: none;
+        font-size: 14px;
+        transition: background 0.18s, color 0.18s;
+        cursor: pointer;
+        font-weight: 500;
+      }
+      .dropdown-item:hover {
+        background: var(--bg-darker);
+        color: var(--gold);
+      }
+      .dropdown-item i {
+        font-size: 16px;
+        width: 20px;
+        text-align: center;
+      }
+
+      .dropdown-divider {
+        height: 1px;
+        background: var(--border);
+        margin: 8px 0;
+      }
+
+      /* Toggle Switch para modo oscuro */
+      .theme-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 20px;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text-main);
+      }
+
+      .toggle-switch {
+        position: relative;
+        width: 44px;
+        height: 24px;
+        background: var(--border);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      .toggle-switch.active {
+        background: var(--gold);
+      }
+
+      .toggle-slider {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+        transition: transform 0.3s;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .toggle-switch.active .toggle-slider {
+        transform: translateX(20px);
+      }
+
       /* Dashboard Content */
       .dashboard {
-        padding: 38px 38px 0 38px;
+        padding: 38px 48px 38px 38px; /* Aumenta el padding derecho para compensar el scrollbar */
         max-width: 1400px;
         margin: 0 auto;
-        margin-top: 130px; /* Altura del header fijo para que no lo tape */
+        margin-top: 130px;
+        overflow-y: auto; /* Asegura que tenga scroll vertical cuando sea necesario */
+        max-height: calc(
+          100vh - 130px
+        ); /* Ajusta según la altura de tu header */
+
+        /* Estilos para el scrollbar en WebKit (Chrome, Safari, Edge) */
+        &::-webkit-scrollbar {
+          width: 10px;
+        }
+
+        &::-webkit-scrollbar-track {
+          background: var(--bg-dark);
+          border-radius: 5px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background-color: var(--gold);
+          border-radius: 5px;
+          border: 2px solid var(--bg-dark);
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+          background-color: #b8941f; /* Un tono más oscuro del dorado */
+        }
+      }
+      /* Para Firefox */
+      .dashboard {
+        scrollbar-width: thin;
+        scrollbar-color: var(--gold) var(--bg-dark);
       }
       .stats-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
         gap: 28px;
         margin-bottom: 38px;
+        margin-top: 10px;
       }
       .stat-card {
         background: var(--bg-card);
@@ -261,22 +499,38 @@
         justify-content: center;
         font-size: 24px;
         margin-bottom: 18px;
-        box-shadow: 0 2px 8px #00000020;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
       }
       .stat-icon.income {
-        background: linear-gradient(135deg, rgba(34,197,94,0.22) 0%, rgba(34,197,94,0.10) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(34, 197, 94, 0.22) 0%,
+          rgba(34, 197, 94, 0.1) 100%
+        );
         color: #22c55e;
       }
       .stat-icon.expense {
-        background: linear-gradient(135deg, rgba(239,68,68,0.22) 0%, rgba(239,68,68,0.10) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(239, 68, 68, 0.22) 0%,
+          rgba(239, 68, 68, 0.1) 100%
+        );
         color: #ef4444;
       }
       .stat-icon.savings {
-        background: linear-gradient(135deg, rgba(59,130,246,0.22) 0%, rgba(59,130,246,0.10) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(59, 130, 246, 0.22) 0%,
+          rgba(59, 130, 246, 0.1) 100%
+        );
         color: #3b82f6;
       }
       .stat-icon.balance {
-        background: linear-gradient(135deg, rgba(212,175,55,0.22) 0%, rgba(212,175,55,0.10) 100%);
+        background: linear-gradient(
+          135deg,
+          rgba(212, 175, 55, 0.22) 0%,
+          rgba(212, 175, 55, 0.1) 100%
+        );
         color: var(--gold);
       }
       .stat-title {
@@ -289,7 +543,7 @@
       .stat-value {
         font-size: 2.1rem;
         font-weight: 900;
-        color: #fff;
+        color: var(--text-main);
         margin-bottom: 10px;
         letter-spacing: -1px;
       }
@@ -301,9 +555,15 @@
         font-weight: 600;
         margin-top: 2px;
       }
-      .stat-change.positive { color: #22c55e; }
-      .stat-change.negative { color: #ef4444; }
-      .change-icon { font-size: 12px; }
+      .stat-change.positive {
+        color: #22c55e;
+      }
+      .stat-change.negative {
+        color: #ef4444;
+      }
+      .change-icon {
+        font-size: 12px;
+      }
       /* Charts Section */
       .charts-section {
         display: grid;
@@ -330,7 +590,7 @@
       .chart-title {
         font-size: 1.25rem;
         font-weight: 800;
-        color: #fff;
+        color: var(--text-main);
         letter-spacing: 0.2px;
       }
       .chart-filters {
@@ -348,19 +608,24 @@
         transition: all 0.18s;
         font-weight: 600;
       }
-      .filter-btn.active, .filter-btn:hover {
+      .filter-btn.active,
+      .filter-btn:hover {
         border-color: var(--gold);
         color: var(--gold);
-        background: #181818;
+        background: var(--bg-darker);
       }
       .chart-placeholder {
         flex: 1;
-        background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+        background: linear-gradient(
+          135deg,
+          var(--bg-darker) 0%,
+          var(--bg-dark) 100%
+        );
         border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #666;
+        color: var(--text-muted);
         font-size: 15px;
         font-weight: 600;
         letter-spacing: 0.2px;
@@ -383,7 +648,7 @@
       .section-title {
         font-size: 1.25rem;
         font-weight: 800;
-        color: #fff;
+        color: var(--text-main);
         letter-spacing: 0.2px;
       }
       .view-all-btn {
@@ -404,7 +669,9 @@
         padding: 18px 0;
         border-bottom: 1.5px solid var(--border);
       }
-      .transaction-item:last-child { border-bottom: none; }
+      .transaction-item:last-child {
+        border-bottom: none;
+      }
       .transaction-icon {
         width: 44px;
         height: 44px;
@@ -413,21 +680,23 @@
         align-items: center;
         justify-content: center;
         font-size: 18px;
-        box-shadow: 0 2px 8px #00000020;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
       }
       .transaction-icon.income {
-        background: rgba(34,197,94,0.13);
+        background: rgba(34, 197, 94, 0.13);
         color: #22c55e;
       }
       .transaction-icon.expense {
-        background: rgba(239,68,68,0.13);
+        background: rgba(239, 68, 68, 0.13);
         color: #ef4444;
       }
-      .transaction-details { flex: 1; }
+      .transaction-details {
+        flex: 1;
+      }
       .transaction-title {
         font-size: 15px;
         font-weight: 700;
-        color: #fff;
+        color: var(--text-main);
         margin-bottom: 2px;
       }
       .transaction-category {
@@ -440,29 +709,536 @@
         font-weight: 800;
         letter-spacing: 0.2px;
       }
-      .transaction-amount.income { color: #22c55e; }
-      .transaction-amount.expense { color: #ef4444; }
+      .transaction-amount.income {
+        color: #22c55e;
+      }
+      .transaction-amount.expense {
+        color: #ef4444;
+      }
       .transaction-date {
         font-size: 13px;
-        color: #666;
+        color: var(--text-muted);
         text-align: right;
         font-weight: 500;
       }
+
+      /* Modal para cambiar contraseña */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 3000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+      }
+
+      .modal-content {
+        background-color: var(--bg-card);
+        margin: 10% auto;
+        padding: 30px;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        width: 90%;
+        max-width: 450px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .modal-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text-main);
+      }
+
+      .close {
+        color: var(--text-muted);
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        line-height: 1;
+      }
+
+      .close:hover {
+        color: var(--gold);
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        color: var(--text-main);
+        font-size: 14px;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1.5px solid var(--border);
+        border-radius: 8px;
+        background: var(--bg-darker);
+        color: var(--text-main);
+        font-size: 14px;
+        transition: border-color 0.2s;
+      }
+
+      .form-input:focus {
+        outline: none;
+        border-color: var(--gold);
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+        margin-top: 25px;
+      }
+
+      .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 14px;
+      }
+
+      .btn-cancel {
+        background: var(--bg-darker);
+        color: var(--text-muted);
+        border: 1px solid var(--border);
+      }
+
+      .btn-cancel:hover {
+        background: var(--border);
+      }
+
+      .btn-primary {
+        background: var(--gold);
+        color: #000;
+        font-weight: 700;
+      }
+
+      .btn-primary:hover {
+        background: #b8941f;
+      }
+
       /* Responsive */
       @media (max-width: 1200px) {
-        .dashboard, .header { padding-left: 18px; padding-right: 18px; }
+        .dashboard,
+        .header {
+          padding-left: 18px;
+          padding-right: 18px;
+        }
       }
       @media (max-width: 1024px) {
-        .charts-section { grid-template-columns: 1fr; }
-        .main-content { margin-left: 0; }
-        .sidebar { display: none; }
+        .charts-section {
+          grid-template-columns: 1fr;
+        }
+        .main-content {
+          margin-left: 0;
+        }
+        .sidebar {
+          display: none;
+        }
+        .header {
+          left: 0;
+          width: 100%;
+        }
       }
       @media (max-width: 768px) {
-        .dashboard { padding: 12px; }
-        .header { padding: 18px 12px 12px 12px; }
-        .stats-grid { grid-template-columns: 1fr; gap: 18px; }
-        .charts-section { gap: 18px; }
-        .transactions-section { padding: 18px 10px; }
+        .dashboard {
+          padding: 12px;
+          margin-top: 110px;
+        }
+        .header {
+          padding: 18px 12px 12px 12px;
+        }
+        .stats-grid {
+          grid-template-columns: 1fr;
+          gap: 18px;
+        }
+        .charts-section {
+          gap: 18px;
+        }
+        .transactions-section {
+          padding: 18px 10px;
+        }
+        .user-dropdown {
+          right: -20px;
+          min-width: 220px;
+        }
+      }
+      /* Notificaciones */
+      .notifications-container {
+        position: relative;
+        cursor: pointer;
+      }
+
+      .notifications-dropdown {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 50px;
+        background: var(--bg-card);
+        border: 1.5px solid var(--border);
+        border-radius: 12px;
+        width: 350px;
+        max-height: 500px;
+        overflow-y: auto;
+        z-index: 2000;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+        padding: 16px 0;
+        animation: fadeIn 0.18s;
+      }
+
+      .notifications-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 16px 12px 16px;
+        border-bottom: 1.5px solid var(--border);
+        margin-bottom: 8px;
+      }
+
+      .notifications-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text-main);
+      }
+
+      .close-notifications {
+        color: var(--text-muted);
+        font-size: 20px;
+        cursor: pointer;
+        transition: color 0.2s;
+      }
+
+      .close-notifications:hover {
+        color: var(--gold);
+      }
+
+      .notification-item {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .notification-item:last-child {
+        border-bottom: none;
+      }
+
+      .notification-item:hover {
+        background: var(--bg-darker);
+      }
+
+      .notification-content {
+        display: flex;
+        gap: 12px;
+      }
+
+      .notification-icon {
+        font-size: 18px;
+        color: var(--gold);
+        margin-top: 2px;
+      }
+
+      .notification-details {
+        flex: 1;
+      }
+
+      .notification-title {
+        font-weight: 600;
+        color: var(--text-main);
+        margin-bottom: 4px;
+      }
+
+      .notification-preview {
+        font-size: 13px;
+        color: var(--text-muted);
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .notification-date {
+        font-size: 11px;
+        color: var(--text-muted);
+        margin-top: 4px;
+        font-weight: 500;
+      }
+
+      /* Modal de Notificación */
+      .notification-modal {
+        display: none;
+        position: fixed;
+        z-index: 3002; /* Aumentado de 3001 a 3002 */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+      }
+
+      .notification-modal-content {
+        background-color: var(--bg-card);
+        margin: 10% auto;
+        padding: 25px;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        width: 90%;
+        max-width: 500px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .notification-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .notification-modal-title {
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: var(--text-main);
+      }
+
+      .notification-modal-close {
+        color: var(--text-muted);
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        line-height: 1;
+      }
+
+      .notification-modal-close:hover {
+        color: var(--gold);
+      }
+
+      .notification-modal-body {
+        margin-bottom: 25px;
+      }
+
+      .notification-modal-date {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-bottom: 15px;
+        font-weight: 500;
+      }
+
+      .notification-modal-text {
+        line-height: 1.6;
+        color: var(--text-main);
+      }
+
+      .notification-modal-actions {
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .notification-modal-btn {
+        padding: 8px 20px;
+        background: var(--gold);
+        color: #000;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .notification-modal-btn:hover {
+        background: #b8941f;
+      }
+
+      /* Ver todas las notificaciones */
+      .view-all-notifications {
+        text-align: center;
+        padding: 12px;
+        border-top: 1.5px solid var(--border);
+        margin-top: 8px;
+      }
+
+      .view-all-link {
+        color: var(--gold);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.2s;
+      }
+
+      .view-all-link:hover {
+        text-decoration: underline;
+      }
+
+      /* Scrollbar para el dropdown */
+      .notifications-dropdown::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .notifications-dropdown::-webkit-scrollbar-track {
+        background: var(--bg-darker);
+        border-radius: 3px;
+      }
+
+      .notifications-dropdown::-webkit-scrollbar-thumb {
+        background: var(--gold);
+        border-radius: 3px;
+      }
+
+      .notifications-dropdown::-webkit-scrollbar-thumb:hover {
+        background: #b8941f;
+      }
+
+      /* Modal de Todas las Notificaciones */
+      .all-notifications-modal {
+        display: none;
+        position: fixed;
+        z-index: 3000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+      }
+
+      .all-notifications-content {
+        background-color: var(--bg-card);
+        margin: 5% auto;
+        padding: 25px;
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        width: 90%;
+        max-width: 700px;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .all-notifications-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 1.5px solid var(--border);
+      }
+
+      .all-notifications-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--text-main);
+      }
+
+      .all-notifications-close {
+        color: var(--text-muted);
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        line-height: 1;
+      }
+
+      .all-notifications-close:hover {
+        color: var(--gold);
+      }
+
+      .all-notification-item {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border);
+        transition: background 0.2s;
+        cursor: pointer;
+      }
+
+      .all-notification-item:last-child {
+        border-bottom: none;
+      }
+
+      .all-notification-item:hover {
+        background: var(--bg-darker);
+        border-radius: 8px;
+      }
+
+      .read-notification {
+        opacity: 0.7;
+      }
+
+      .read-notification .all-notification-title {
+        font-weight: 600;
+      }
+
+      .all-notification-content {
+        display: flex;
+        gap: 15px;
+      }
+
+      .all-notification-icon {
+        font-size: 20px;
+        color: var(--gold);
+        margin-top: 3px;
+      }
+
+      .all-notification-details {
+        flex: 1;
+      }
+
+      .all-notification-title {
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 6px;
+        font-size: 16px;
+      }
+
+      .all-notification-text {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 8px;
+        line-height: 1.4;
+      }
+
+      .all-notification-date {
+        font-size: 12px;
+        color: var(--text-muted);
+        font-weight: 500;
+      }
+
+      /* Estilo del scrollbar para Todas las Notificaciones (igual que Notificaciones) */
+      .all-notifications-content::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .all-notifications-content::-webkit-scrollbar-track {
+        background: var(--bg-darker);
+        border-radius: 3px;
+      }
+
+      .all-notifications-content::-webkit-scrollbar-thumb {
+        background: var(--gold);
+        border-radius: 3px;
+      }
+
+      .all-notifications-content::-webkit-scrollbar-thumb:hover {
+        background: #b8941f; /* Un tono más oscuro del dorado */
       }
     </style>
   </head>
@@ -471,7 +1247,11 @@
     <div class="sidebar">
       <div class="sidebar-header">
         <div class="sidebar-logo">
-          <img src="{{ url_for('static', filename='AssetNext.jpg') }}" alt="AssetNext Logo" class="logo-icon-img" />
+          <img
+            src="{{ url_for('static', filename='AssetNext.jpg') }}"
+            alt="AssetNext Logo"
+            class="logo-icon-img"
+          />
           <div class="logo-text">AssetNext</div>
         </div>
         <div class="logo-subtitle">Gestión Financiera</div>
@@ -519,17 +1299,17 @@
             </a>
           </div>
         </div>
-        <div class="nav-section">
-          <div class="nav-title">Configuración</div>
-          <div class="nav-item">
-            <a href="{{ url_for('configuracion') }}" class="nav-link">
-              <i class="nav-icon fas fa-cog"></i>
-              Ajustes
-            </a>
-          </div>
-        </div>
       </nav>
+
+      <!-- Logout en la parte inferior -->
+      <div class="sidebar-footer">
+        <a href="{{ url_for('logout') }}" class="logout-link">
+          <i class="fas fa-sign-out-alt"></i>
+          Cerrar Sesión
+        </a>
+      </div>
     </div>
+
     <!-- Main Content -->
     <div class="main-content">
       <!-- Header -->
@@ -539,102 +1319,216 @@
           <p class="header-subtitle">Resumen de tu actividad financiera</p>
         </div>
         <div class="header-actions">
-          <div class="user-menu" id="userMenu" onclick="toggleDropdown()">
-            <div class="user-avatar">JD</div>
-            <div class="user-info">
-              <div class="user-name">{{ current_user.nombre }} {{ current_user.apellido }}</div>
-              <div class="user-role">Usuario Premium</div>
+          <!-- Notificaciones -->
+          <div class="notifications-container" id="notificationsContainer">
+            <div class="notifications" id="notificationsBtn">
+              <i class="fas fa-bell notification-icon"></i>
+              <span class="notification-badge">5</span>
             </div>
-            <i class="fas fa-chevron-down" style="color: #666; font-size: 12px"></i>
-            <div id="userDropdown" class="user-dropdown">
-              <div class="dropdown-container center-dropdown">
-                <a href="{{ url_for('logout') }}" class="dropdown-link logout-link">
-                  <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-                </a>
+
+            <!-- Dropdown de Notificaciones -->
+            <div class="notifications-dropdown" id="notificationsDropdown">
+              <div class="notifications-header">
+                <div class="notifications-title">Notificaciones</div>
+                <div class="close-notifications" id="closeNotifications">
+                  &times;
+                </div>
+              </div>
+
+              <div
+                class="notification-item"
+                onclick="showNotificationModal('Actualización del sistema', 'Se ha implementado una nueva actualización con mejoras en el rendimiento y nuevas funciones de análisis financiero. Recomendamos revisar las nuevas características disponibles.', '31 de ago, 2023')"
+              >
+                <div class="notification-content">
+                  <div class="notification-icon">
+                    <i class="fas fa-cog"></i>
+                  </div>
+                  <div class="notification-details">
+                    <div class="notification-title">
+                      Actualización del sistema
+                    </div>
+                    <div class="notification-preview">
+                      Se ha implementado una nueva actualización con mejoras en
+                      el rendimiento...
+                    </div>
+                    <div class="notification-date">31 de ago, 2023</div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="notification-item"
+                onclick="showNotificationModal('Meta alcanzada', '¡Felicidades! Has alcanzado tu meta de ahorro mensual con un 105% de cumplimiento. Continúa con este excelente rendimiento financiero.', '28 de ago, 2023')"
+              >
+                <div class="notification-content">
+                  <div class="notification-icon">
+                    <i class="fas fa-trophy"></i>
+                  </div>
+                  <div class="notification-details">
+                    <div class="notification-title">Meta alcanzada</div>
+                    <div class="notification-preview">
+                      ¡Felicidades! Has alcanzado tu meta de ahorro mensual con
+                      un 105%...
+                    </div>
+                    <div class="notification-date">28 de ago, 2023</div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="notification-item"
+                onclick="showNotificationModal('Recordatorio de pago', 'Tu factura de servicios públicos vence en 2 días. Monto a pagar: S/. 120.50. Configura el pago automático para evitar cargos por mora.', '25 de ago, 2023')"
+              >
+                <div class="notification-content">
+                  <div class="notification-icon">
+                    <i class="fas fa-clock"></i>
+                  </div>
+                  <div class="notification-details">
+                    <div class="notification-title">Recordatorio de pago</div>
+                    <div class="notification-preview">
+                      Tu factura de servicios públicos vence en 2 días. Monto a
+                      pagar: S/. 120.50...
+                    </div>
+                    <div class="notification-date">25 de ago, 2023</div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="notification-item"
+                onclick="showNotificationModal('Transacción inusual', 'Hemos detectado una transacción inusual en tu cuenta por S/. 450.00. ¿Reconoces esta operación?', '22 de ago, 2023')"
+              >
+                <div class="notification-content">
+                  <div class="notification-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                  </div>
+                  <div class="notification-details">
+                    <div class="notification-title">Transacción inusual</div>
+                    <div class="notification-preview">
+                      Hemos detectado una transacción inusual en tu cuenta por
+                      S/. 450.00...
+                    </div>
+                    <div class="notification-date">22 de ago, 2023</div>
+                  </div>
+                </div>
+              </div>
+
+              <div
+                class="notification-item"
+                onclick="showNotificationModal('Nueva función disponible', 'Ya puedes crear presupuestos personalizados por categoría con nuestro nuevo asistente inteligente. Pruébalo ahora.', '18 de ago, 2023')"
+              >
+                <div class="notification-content">
+                  <div class="notification-icon">
+                    <i class="fas fa-lightbulb"></i>
+                  </div>
+                  <div class="notification-details">
+                    <div class="notification-title">
+                      Nueva función disponible
+                    </div>
+                    <div class="notification-preview">
+                      Ya puedes crear presupuestos personalizados por categoría
+                      con nuestro...
+                    </div>
+                    <div class="notification-date">18 de ago, 2023</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="view-all-notifications">
+                <a
+                  href="#"
+                  class="view-all-link"
+                  onclick="return viewAllNotifications()"
+                  >Ver todas las notificaciones</a
+                >
               </div>
             </div>
-            <style>
-              .user-dropdown {
-                display: none;
-                position: absolute;
-                right: 0;
-                top: 48px;
-                background: #232323;
-                border: 1px solid #2a2a2a;
-                border-radius: 12px;
-                min-width: 210px;
-                z-index: 2000;
-                box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-                padding: 0;
-                animation: fadeIn 0.18s;
-              }
-              @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(-8px); }
-                to { opacity: 1; transform: translateY(0); }
-              }
-              .dropdown-container.center-dropdown {
-                padding: 18px 0 14px 0;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 10px;
-                justify-content: center;
-              }
-              .dropdown-link {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 10px;
-                padding: 12px 28px;
-                color: #fff;
-                text-decoration: none;
-                font-size: 16px;
-                border: none;
-                background: none;
-                transition: background 0.18s, color 0.18s;
-                border-radius: 8px;
-                cursor: pointer;
-                font-weight: 600;
-                letter-spacing: 0.5px;
-                width: 100%;
-                text-align: center;
-              }
-              .dropdown-link i {
-                font-size: 18px;
-              }
-              .dropdown-link:hover {
-                background: #181818;
-                color: #d4af37;
-              }
-              .logout-link {
-                color: #ef4444;
-                border: 1px solid #ef4444;
-                background: #2a1818;
-                margin-top: 4px;
-                font-weight: 700;
-                box-shadow: 0 2px 8px #ef444422;
-              }
-              .logout-link:hover {
-                color: #fff;
-                background: #b91c1c;
-                border-color: #b91c1c;
-              }
-            </style>
           </div>
-          <script>
-            function toggleDropdown() {
-              var dropdown = document.getElementById('userDropdown');
-              dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-              document.addEventListener('click', function handler(e) {
-                if (!document.getElementById('userMenu').contains(e.target)) {
-                  dropdown.style.display = 'none';
-                  document.removeEventListener('click', handler);
-                }
-              });
-            }
-          </script>
+
+          <!-- Modal de Notificación -->
+          <div id="notificationModal" class="notification-modal">
+            <div class="notification-modal-content">
+              <div class="notification-modal-header">
+                <h2
+                  class="notification-modal-title"
+                  id="notificationModalTitle"
+                ></h2>
+                <span
+                  class="notification-modal-close"
+                  onclick="closeNotificationModal()"
+                  >&times;</span
+                >
+              </div>
+              <div class="notification-modal-body">
+                <div
+                  class="notification-modal-date"
+                  id="notificationModalDate"
+                ></div>
+                <div
+                  class="notification-modal-text"
+                  id="notificationModalText"
+                ></div>
+              </div>
+              <div class="notification-modal-actions">
+                <button
+                  class="notification-modal-btn"
+                  onclick="closeNotificationModal()"
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Menu -->
+          <div class="user-menu" id="userMenu" onclick="toggleDropdown()">
+            <div class="user-avatar">
+              {{ current_user.nombre[0] | upper
+              }}{{ current_user.apellido[0] | upper }}
+            </div>
+            <div class="user-info">
+              <div class="user-name">
+                {{ current_user.nombre }} {{ current_user.apellido }}
+              </div>
+              <div class="user-role">Usuario Premium</div>
+            </div>
+            <i
+              class="fas fa-chevron-down"
+              style="color: var(--text-muted); font-size: 12px"
+            ></i>
+
+            <!-- Dropdown Menu -->
+            <div id="userDropdown" class="user-dropdown">
+              <a href="#" class="dropdown-item" onclick="openProfile()">
+                <i class="fas fa-user"></i>
+                Mi Perfil
+              </a>
+
+              <div class="theme-toggle">
+                <div style="display: flex; align-items: center; gap: 10px">
+                  <i class="fas fa-moon" id="themeIcon"></i>
+                  <span>Modo Oscuro</span>
+                </div>
+                <div
+                  class="toggle-switch"
+                  id="themeToggle"
+                  onclick="toggleTheme()"
+                >
+                  <div class="toggle-slider"></div>
+                </div>
+              </div>
+
+              <div class="dropdown-divider"></div>
+
+              <a href="#" class="dropdown-item" onclick="openChangePassword()">
+                <i class="fas fa-key"></i>
+                Cambiar Contraseña
+              </a>
+            </div>
+          </div>
         </div>
       </header>
+
       <!-- Dashboard Content -->
       <div class="dashboard">
         <!-- Stats Cards -->
@@ -684,6 +1578,7 @@
             </div>
           </div>
         </div>
+
         <!-- Charts Section -->
         <div class="charts-section">
           <div class="chart-card">
@@ -705,6 +1600,7 @@
             <div class="chart-placeholder">Gráfico de distribución</div>
           </div>
         </div>
+
         <!-- Recent Transactions -->
         <div class="transactions-section">
           <div class="section-header">
@@ -758,5 +1654,427 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal para cambiar contraseña -->
+    <div id="changePasswordModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title">Cambiar Contraseña</h2>
+          <span class="close" onclick="closeChangePassword()">&times;</span>
+        </div>
+        <form id="changePasswordForm">
+          <div class="form-group">
+            <label class="form-label" for="currentPassword"
+              >Contraseña Actual</label
+            >
+            <input
+              type="password"
+              id="currentPassword"
+              class="form-input"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="newPassword">Nueva Contraseña</label>
+            <input
+              type="password"
+              id="newPassword"
+              class="form-input"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="confirmPassword"
+              >Confirmar Nueva Contraseña</label
+            >
+            <input
+              type="password"
+              id="confirmPassword"
+              class="form-input"
+              required
+            />
+          </div>
+          <div class="modal-actions">
+            <button
+              type="button"
+              class="btn btn-cancel"
+              onclick="closeChangePassword()"
+            >
+              Cancelar
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Cambiar Contraseña
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal de Todas las Notificaciones -->
+    <div id="allNotificationsModal" class="all-notifications-modal">
+      <div class="all-notifications-content">
+        <div class="all-notifications-header">
+          <h2 class="all-notifications-title">Todas las notificaciones</h2>
+          <span
+            class="all-notifications-close"
+            onclick="closeAllNotificationsModal()"
+            >&times;</span
+          >
+        </div>
+
+        <!-- Notificación 1: Actualización del sistema -->
+        <div
+          class="all-notification-item"
+          onclick="showNotificationModalFromAll('Actualización del sistema', 'Se ha implementado una nueva actualización con mejoras en el rendimiento y nuevas funciones de análisis financiero. Recomendamos revisar las nuevas características disponibles en la sección de reportes.\n\nNovedades:\n- Análisis de gastos mejorado\n- Exportación de reportes en PDF\n- Alertas personalizables', '31 de ago, 2023', this)"
+        >
+          <div class="all-notification-content">
+            <div class="all-notification-icon">
+              <i class="fas fa-cog"></i>
+            </div>
+            <div class="all-notification-details">
+              <div class="all-notification-title">
+                Actualización del sistema
+              </div>
+              <div class="all-notification-text">
+                Se ha implementado una nueva actualización con mejoras en el
+                rendimiento y nuevas funciones de análisis financiero.
+                Recomendamos revisar las nuevas características disponibles en
+                la sección de reportes.
+              </div>
+              <div class="all-notification-date">31 de ago, 2023</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notificación 2: Meta alcanzada -->
+        <div
+          class="all-notification-item"
+          onclick="showNotificationModalFromAll('Meta alcanzada', '¡Felicidades! Has alcanzado tu meta de ahorro mensual con un 105% de cumplimiento. Continúa con este excelente rendimiento financiero para alcanzar tus objetivos a largo plazo.\n\nDetalles:\n- Meta establecida: S/. 1,500\n- Ahorro actual: S/. 1,575\n- Días restantes: 5', '28 de ago, 2023', this)"
+        >
+          <div class="all-notification-content">
+            <div class="all-notification-icon">
+              <i class="fas fa-trophy"></i>
+            </div>
+            <div class="all-notification-details">
+              <div class="all-notification-title">Meta alcanzada</div>
+              <div class="all-notification-text">
+                ¡Felicidades! Has alcanzado tu meta de ahorro mensual con un
+                105% de cumplimiento. Continúa con este excelente rendimiento
+                financiero para alcanzar tus objetivos...
+              </div>
+              <div class="all-notification-date">28 de ago, 2023</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notificación 3: Recordatorio de pago -->
+        <div
+          class="all-notification-item"
+          onclick="showNotificationModalFromAll('Recordatorio de pago', 'Tu factura de servicios públicos vence en 2 días. Monto a pagar: S/. 120.50. Configura el pago automático para evitar cargos por mora.\n\nDetalles:\n- Servicio: Luz del Sur\n- Fecha de vencimiento: 27/08/2023\n- Número de factura: F-2023-08567', '25 de ago, 2023', this)"
+        >
+          <div class="all-notification-content">
+            <div class="all-notification-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="all-notification-details">
+              <div class="all-notification-title">Recordatorio de pago</div>
+              <div class="all-notification-text">
+                Tu factura de servicios públicos vence en 2 días. Monto a pagar:
+                S/. 120.50. Configura el pago automático para evitar cargos por
+                mora.
+              </div>
+              <div class="all-notification-date">25 de ago, 2023</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notificación 4: Transacción inusual -->
+        <div
+          class="all-notification-item"
+          onclick="showNotificationModalFromAll('Transacción inusual', 'Hemos detectado una transacción inusual en tu cuenta por S/. 450.00. ¿Reconoces esta operación?\n\nDetalles:\n- Fecha: 22/08/2023 14:35\n- Destinatario: Amazon Web Services\n- Método de pago: Tarjeta Visa ****4567\n\nSi no reconoces esta transacción, por favor repórtala inmediatamente.', '22 de ago, 2023', this)"
+        >
+          <div class="all-notification-content">
+            <div class="all-notification-icon">
+              <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="all-notification-details">
+              <div class="all-notification-title">Transacción inusual</div>
+              <div class="all-notification-text">
+                Hemos detectado una transacción inusual en tu cuenta por S/.
+                450.00. ¿Reconoces esta operación?
+              </div>
+              <div class="all-notification-date">22 de ago, 2023</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notificación 5: Nueva función disponible -->
+        <div
+          class="all-notification-item"
+          onclick="showNotificationModalFromAll('Nueva función disponible', 'Ya puedes crear presupuestos personalizados por categoría con nuestro nuevo asistente inteligente. Pruébalo ahora.\n\nCaracterísticas:\n- Sugerencias automáticas de presupuesto\n- Alertas cuando te acercas al límite\n- Comparativa con meses anteriores\n\nPara acceder: Menú > Planificación > Presupuestos', '18 de ago, 2023', this)"
+        >
+          <div class="all-notification-content">
+            <div class="all-notification-icon">
+              <i class="fas fa-lightbulb"></i>
+            </div>
+            <div class="all-notification-details">
+              <div class="all-notification-title">Nueva función disponible</div>
+              <div class="all-notification-text">
+                Ya puedes crear presupuestos personalizados por categoría con
+                nuestro nuevo asistente inteligente. Pruébalo ahora.
+              </div>
+              <div class="all-notification-date">18 de ago, 2023</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Elementos del DOM para reutilización
+      const elements = {
+        notifications: {
+          dropdown: () => document.getElementById('notificationsDropdown'),
+          container: () => document.getElementById('notificationsContainer'),
+          btn: () => document.getElementById('notificationsBtn'),
+          closeBtn: () => document.getElementById('closeNotifications'),
+          modal: () => document.getElementById('notificationModal'),
+          allModal: () => document.getElementById('allNotificationsModal'),
+          modalTitle: () => document.getElementById('notificationModalTitle'),
+          modalText: () => document.getElementById('notificationModalText'),
+          modalDate: () => document.getElementById('notificationModalDate')
+        },
+        theme: {
+          toggle: () => document.getElementById('themeToggle'),
+          icon: () => document.getElementById('themeIcon'),
+          text: () =>
+            document
+              .getElementById('themeIcon')
+              .parentElement.querySelector('span')
+        },
+        user: {
+          dropdown: () => document.getElementById('userDropdown'),
+          menu: () => document.getElementById('userMenu')
+        },
+        password: {
+          modal: () => document.getElementById('changePasswordModal'),
+          form: () => document.getElementById('changePasswordForm')
+        }
+      }
+
+      // Funciones de notificaciones (optimizadas)
+      function toggleNotifications(e) {
+        e.stopPropagation()
+        const dropdown = elements.notifications.dropdown()
+        dropdown.style.display =
+          dropdown.style.display === 'block' ? 'none' : 'block'
+
+        document.addEventListener('click', function closeHandler(e) {
+          if (
+            !elements.notifications.container().contains(e.target) &&
+            !elements.notifications.modal().contains(e.target)
+          ) {
+            dropdown.style.display = 'none'
+            document.removeEventListener('click', closeHandler)
+          }
+        })
+      }
+
+      function closeNotifications() {
+        elements.notifications.dropdown().style.display = 'none'
+      }
+
+      function showNotificationModal(title, text, date) {
+        elements.notifications.modalTitle().textContent = title
+        elements.notifications.modalText().innerHTML = text.replace(
+          /\n/g,
+          '<br>'
+        )
+        elements.notifications.modalDate().textContent = date
+        elements.notifications.modal().style.display = 'block'
+      }
+
+      function closeNotificationModal() {
+        elements.notifications.modal().style.display = 'none'
+        if (window.wasAllNotificationsOpen) {
+          elements.notifications.allModal().style.display = 'block'
+          window.wasAllNotificationsOpen = false
+        }
+      }
+
+      function showNotificationModalFromAll(title, text, date, element) {
+        window.wasAllNotificationsOpen = true
+        elements.notifications.allModal().style.display = 'none'
+        element.classList.add('read-notification')
+        showNotificationModal(title, text, date)
+        event.stopPropagation()
+      }
+
+      function viewAllNotifications() {
+        closeNotifications()
+        elements.notifications.allModal().style.display = 'block'
+        return false
+      }
+
+      function closeAllNotificationsModal() {
+        elements.notifications.allModal().style.display = 'none'
+      }
+
+      // Funciones de tema (MANTENIENDO LA LÓGICA ORIGINAL QUE FUNCIONA)
+      function initializeTheme() {
+        const savedTheme = localStorage.getItem('theme') || 'dark'
+        const toggle = elements.theme.toggle()
+        const themeIcon = elements.theme.icon()
+        const themeText = elements.theme.text()
+
+        document.documentElement.setAttribute('data-theme', savedTheme)
+
+        if (savedTheme === 'light') {
+          toggle.classList.add('active')
+          themeIcon.classList.remove('fa-moon')
+          themeIcon.classList.add('fa-sun')
+          themeText.textContent = 'Modo Claro'
+        } else {
+          toggle.classList.remove('active')
+          themeIcon.classList.remove('fa-sun')
+          themeIcon.classList.add('fa-moon')
+          themeText.textContent = 'Modo Oscuro'
+        }
+      }
+
+      function toggleTheme() {
+        const toggle = elements.theme.toggle()
+        const themeIcon = elements.theme.icon()
+        const themeText = elements.theme.text()
+        const currentTheme = document.documentElement.getAttribute('data-theme')
+
+        if (currentTheme === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'light')
+          toggle.classList.add('active')
+          themeIcon.classList.remove('fa-moon')
+          themeIcon.classList.add('fa-sun')
+          themeText.textContent = 'Modo Claro'
+          localStorage.setItem('theme', 'light')
+        } else {
+          document.documentElement.setAttribute('data-theme', 'dark')
+          toggle.classList.remove('active')
+          themeIcon.classList.remove('fa-sun')
+          themeIcon.classList.add('fa-moon')
+          themeText.textContent = 'Modo Oscuro'
+          localStorage.setItem('theme', 'dark')
+        }
+
+        event.stopPropagation()
+      }
+
+      // Funciones de usuario
+      function toggleDropdown() {
+        const dropdown = elements.user.dropdown()
+        dropdown.style.display =
+          dropdown.style.display === 'block' ? 'none' : 'block'
+
+        document.addEventListener('click', function handler(e) {
+          if (!elements.user.menu().contains(e.target)) {
+            dropdown.style.display = 'none'
+            document.removeEventListener('click', handler)
+          }
+        })
+      }
+
+      function openChangePassword() {
+        elements.password.modal().style.display = 'block'
+        elements.user.dropdown().style.display = 'none'
+      }
+
+      function closeChangePassword() {
+        elements.password.modal().style.display = 'none'
+        elements.password.form().reset()
+      }
+
+      function openProfile() {
+        alert('Función de perfil próximamente')
+        elements.user.dropdown().style.display = 'none'
+      }
+
+      // Manejo de clicks fuera de elementos
+      function handleOutsideClicks(e) {
+        // Notificaciones
+        if (
+          elements.notifications.dropdown().style.display === 'block' &&
+          !elements.notifications.container().contains(e.target)
+        ) {
+          closeNotifications()
+        }
+
+        // Modales
+        if (
+          elements.notifications.modal().style.display === 'block' &&
+          e.target === elements.notifications.modal()
+        ) {
+          closeNotificationModal()
+        }
+
+        if (
+          elements.notifications.allModal().style.display === 'block' &&
+          e.target === elements.notifications.allModal()
+        ) {
+          closeAllNotificationsModal()
+        }
+
+        if (
+          elements.password.modal().style.display === 'block' &&
+          e.target === elements.password.modal()
+        ) {
+          closeChangePassword()
+        }
+      }
+
+      // Inicialización y event listeners
+      document.addEventListener('DOMContentLoaded', function () {
+        initializeTheme()
+
+        // Notificaciones
+        elements.notifications
+          .btn()
+          .addEventListener('click', toggleNotifications)
+        elements.notifications
+          .closeBtn()
+          .addEventListener('click', closeNotifications)
+
+        // Contraseña
+        elements.password.form().addEventListener('submit', function (e) {
+          e.preventDefault()
+          const newPassword = document.getElementById('newPassword').value
+          const confirmPassword =
+            document.getElementById('confirmPassword').value
+
+          if (newPassword !== confirmPassword) {
+            alert('Las contraseñas no coinciden')
+            return
+          }
+
+          if (newPassword.length < 6) {
+            alert('La nueva contraseña debe tener al menos 6 caracteres')
+            return
+          }
+
+          alert('Contraseña cambiada exitosamente')
+          closeChangePassword()
+        })
+      })
+
+      // Clicks fuera de elementos
+      window.onclick = handleOutsideClicks
+
+      // Filtros de gráficos
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+          document
+            .querySelectorAll('.filter-btn')
+            .forEach(b => b.classList.remove('active'))
+          this.classList.add('active')
+        })
+      })
+    </script>
   </body>
 </html>
