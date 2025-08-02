@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - AssetNext</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='AssetNext.jpg') }}"/>
+    <style>
+        body {
+            font-family: 'Inter', Arial, sans-serif;
+            background: #181818;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+        }
+        .perfil-main {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            background: linear-gradient(120deg, #181818 70%, #23230e 100%);
+        }
+        .perfil-header {
+            width: 100%;
+            background: linear-gradient(90deg, #ffe082 0%, #d4af37 100%);
+            padding: 48px 0 32px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 32px #d4af3720;
+            position: relative;
+        }
+        .perfil-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #d4af37 0%, #ffe082 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.8rem;
+            font-weight: 900;
+            color: #181818;
+            box-shadow: 0 4px 24px #d4af3720;
+            border: 4px solid #fff;
+            margin-bottom: 18px;
+        }
+        .perfil-nombre {
+            font-size: 2.3rem;
+            font-weight: 900;
+            color: #d4af37;
+            letter-spacing: -1px;
+            text-shadow: 0 2px 12px #fff8;
+        }
+        .perfil-email {
+            font-size: 1.15rem;
+            color: #333;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+        .perfil-card {
+            background: #181818;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px #00000040;
+            border: 2px solid #2a2a2a;
+            padding: 44px 48px 32px 48px;
+            margin-top: -48px;
+            min-width: 340px;
+            max-width: 480px;
+            width: 100%;
+            z-index: 2;
+        }
+        .perfil-datos {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+        .perfil-dato {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: #23230e;
+            border-radius: 10px;
+            padding: 16px 18px;
+            box-shadow: 0 2px 8px #d4af3720;
+        }
+        .perfil-dato i {
+            font-size: 1.35rem;
+            color: #ffe082;
+            min-width: 28px;
+            text-align: center;
+        }
+        .perfil-label {
+            font-size: 1.08rem;
+            color: #ffe082;
+            font-weight: 700;
+            min-width: 140px;
+        }
+        .perfil-valor {
+            font-size: 1.18rem;
+            color: #fff;
+            font-weight: 600;
+            word-break: break-all;
+        }
+        .btn-gold {
+            display: inline-block;
+            margin-bottom: 32px;
+            background: linear-gradient(90deg, #ffe082 0%, #d4af37 100%);
+            color: #181818;
+            font-weight: 800;
+            font-size: 1.12rem;
+            padding: 13px 38px;
+            border-radius: 12px;
+            text-decoration: none;
+            border: 2px solid #d4af37;
+            box-shadow: 0 2px 12px #d4af3720;
+            letter-spacing: 0.03em;
+            transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+        }
+        .btn-gold:hover {
+            background: linear-gradient(90deg, #ffe082 20%, #b8941f 100%);
+            color: #000;
+            box-shadow: 0 4px 18px #d4af3740;
+        }
+        @media (max-width: 600px) {
+            .perfil-card {
+                padding: 18px 4vw 18px 4vw;
+                min-width: unset;
+                max-width: 98vw;
+            }
+            .perfil-header {
+                padding: 32px 0 18px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="perfil-main">
+        <div class="perfil-header">
+            <a href="{{ url_for('home') }}" class="btn-gold" style="position:absolute; left:32px; top:32px; min-width:unset; padding:10px 22px; font-size:1rem;">
+                <i class="fas fa-arrow-left"></i> Inicio
+            </a>
+            <div class="perfil-avatar">
+                {{ usuario.nombre[0]|upper }}{{ usuario.apellido[0]|upper }}
+            </div>
+            <div class="perfil-nombre">{{ usuario.nombre }} {{ usuario.apellido }}</div>
+            <div class="perfil-email"><i class="fas fa-envelope"></i> {{ usuario.email }}</div>
+        </div>
+        <div class="perfil-card">
+            <div class="perfil-datos">
+                <div class="perfil-dato">
+                    <i class="fas fa-user"></i>
+                    <span class="perfil-label">Nombre:</span>
+                    <span class="perfil-valor">{{ usuario.nombre }}</span>
+                </div>
+                <div class="perfil-dato">
+                    <i class="fas fa-user-tag"></i>
+                    <span class="perfil-label">Apellido:</span>
+                    <span class="perfil-valor">{{ usuario.apellido }}</span>
+                </div>
+                <div class="perfil-dato">
+                    <i class="fas fa-envelope"></i>
+                    <span class="perfil-label">Correo:</span>
+                    <span class="perfil-valor">{{ usuario.email }}</span>
+                </div>
+                <div class="perfil-dato">
+                    <i class="fas fa-birthday-cake"></i>
+                    <span class="perfil-label">Fecha de nacimiento:</span>
+                    <span class="perfil-valor">
+                        {% if usuario.fecha_nacimiento %}
+                            {{ usuario.fecha_nacimiento.strftime('%d/%m/%Y') }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="perfil-dato">
+                    <i class="fas fa-key"></i>
+                    <span class="perfil-label">Contraseña:</span>
+                    <span class="perfil-valor">********</span>
+                </div>
+                <div class="perfil-dato">
+                    <i class="fas fa-calendar-plus"></i>
+                    <span class="perfil-label">Fecha de registro:</span>
+                    <span class="perfil-valor">
+                        {{ usuario.fecha_registro or '-' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -209,6 +209,11 @@ def cambiar_contraseña():
     db.session.commit()
     return jsonify({'success': True, 'message': 'Contraseña cambiada exitosamente.'})
 
+@app.route('/perfil')
+@login_required
+def perfil():
+    return render_template('perfil.html', usuario=current_user)
+
 @app.route('/logout')
 @login_required
 def logout():
