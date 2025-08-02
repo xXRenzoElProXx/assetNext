@@ -569,17 +569,28 @@
       <div id="formErrors" style="margin-top: 16px"></div>
       {% if error %}
       <div class="error-message">{{ error }}</div>
-      {% endif %} {% if success %}
-      <div
-        class="error-message"
-        style="
+      {% endif %}
+      {% if success %}
+      <div id="successFade" class="error-message" style="
           color: green;
           border-left: 4px solid #22c55e;
           border: 1px solid rgba(34, 197, 94, 0.3);
-        "
-      >
-        {{ success }}
+          background: #181f16;
+          opacity: 1;
+          transition: opacity 1s;
+        ">
+        {{ success }}<br>
+        Redirigiendo al login...
       </div>
+      <script>
+        setTimeout(function() {
+          var fade = document.getElementById('successFade');
+          if (fade) fade.style.opacity = 0;
+        }, 1200);
+        setTimeout(function() {
+          window.location.href = "{{ url_for('login') }}";
+        }, 2200);
+      </script>
       {% endif %}
       <div class="links">
         <p>

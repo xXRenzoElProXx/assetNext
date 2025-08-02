@@ -214,6 +214,16 @@ def cambiar_contraseña():
 def perfil():
     return render_template('perfil.html', usuario=current_user)
 
+@app.route('/eliminar_cuenta', methods=['POST'])
+@login_required
+def eliminar_cuenta():
+    from flask_login import logout_user
+    usuario = Usuario.query.get(current_user.id)  # Instancia real del usuario
+    logout_user()
+    db.session.delete(usuario)
+    db.session.commit()
+    return redirect(url_for('login'))
+
 @app.route('/logout')
 @login_required
 def logout():
