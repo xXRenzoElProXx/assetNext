@@ -186,6 +186,29 @@ def reset_password(token):
     
     return render_template('auth/reset_password.html', error=error, success=success, token_expired=False)
 
+from flask import jsonify
+
+@app.route('/cambiar_contraseña', methods=['POST'])
+@login_required
+def cambiar_contraseña():
+    data = request.get_json()
+    actual = data.get('actual')
+    nueva = data.get('nueva')
+    confirmar = data.get('confirmar')
+
+    if not check_password_hash(current_user.password, actual):
+        return jsonify({'success': False, 'message': 'La contraseña actual es incorrecta.'}), 400
+    if nueva != confirmar:
+        return jsonify({'success': False, 'message': 'Las contraseñas nuevas no coinciden.'}), 400
+    if len(nueva) < 6:
+        return jsonify({'success': False, 'message': 'La nueva contraseña debe tener al menos 6 caracteres.'}), 400
+    if check_password_hash(current_user.password, nueva):
+        return jsonify({'success': False, 'message': 'La nueva contraseña debe ser diferente a la actual.'}), 400
+
+    current_user.password = generate_password_hash(nueva)
+    db.session.commit()
+    return jsonify({'success': True, 'message': 'Contraseña cambiada exitosamente.'})
+
 @app.route('/logout')
 @login_required
 def logout():
